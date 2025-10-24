@@ -2,52 +2,74 @@ import requests
 
 class ProjectChitaiGorodApi:
 
-    def __init__(self, url) -> None:
+    def __init__(self, url, token) -> None:
         self.url = url
-        self.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3VzZXItcmlnaHQiLCJzdWIiOjIyNTEwOTE3LCJpYXQiOjE3NjEwMzQ3MTgsImV4cCI6MTc2MTAzODMxOCwidHlwZSI6MjAsImp0aSI6IjAxOWEwNWQ5LTRiNDMtNzg4Zi05NzRmLTRlMGNhMjhhYTM4NCIsInJvbGVzIjoxMH0.RdBwYJcLI5MqRyL1lWzwukH8YSldMBU8YyEEro6eCKQ'
+        self.token = token
 
 
-    def get_list_stores(self):
-        key = self.token
-        headers = {
-            'Authorization': f'Bearer {key}'
+    def get_list_stores(self, cityId, phrase):
+        params = {
+            'customerCityId': cityId,
+            'phrase': phrase
         }
-        resp = requests.get(self.url, headers=headers)
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        resp = requests.get(self.url+'/search/facet-search', headers=headers, params = params)
         return resp
 
 
-    def get_search_book_title(self):
-        key = self.token
-        headers = {
-            'Authorization': f'Bearer {key}'
+    def get_search_book_title(self, phrase, perPage):
+        params = {
+            'phrase': phrase,
+            'perPage': perPage
         }
-        resp = requests.get(self.url, headers=headers)
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        resp = requests.get(self.url+'v1/recommend/semantic', headers=headers, params = params)
         return resp
 
-    def get_search_author_name(self):
-        key = self.token
-        headers = {
-            'Authorization': f'Bearer {key}'
+    def get_search_author_name(self, phrase, perPage):
+        params = {
+            'phrase': phrase,
+            'perPage': perPage
         }
-        resp = requests.get(self.url, headers=headers)
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        resp = requests.get(self.url+'v1/recommend/semantic', headers=headers, params = params)
         return resp
 
-    def get_list_stores_not_authorization(self):
-        resp = requests.get(self.url)
+    def get_list_stores_not_authorization(self, cityId, phrase):
+        params = {
+            'cityId': cityId,
+            'phrase': phrase
+        }
+        headers = {
+            'Authorization': ''
+        }
+        resp = requests.get(self.url+'v2/search/facet-search',headers=headers, params = params)
         return resp
 
-    def get_search_book_title_bad_url(self):
-        key = self.token
-        headers = {
-            'Authorization': f'Bearer {key}'
+    def get_search_book_title_bad_url(self, phrase, perPage):
+        params = {
+            'phrase': phrase,
+            'perPage': perPage
         }
-        resp = requests.get(self.url, headers=headers)
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        resp = requests.get(self.url, headers=headers, params = params)
         return resp
 
-    def get_search_author_name_incorrect_method(self):
-        key = self.token
-        headers = {
-            'Authorization': f'Bearer {key}'
+    def get_search_author_name_incorrect_method(self, phrase, perPage):
+        params = {
+            'phrase': phrase,
+            'perPage': perPage
         }
-        resp = requests.post(self.url, headers=headers)
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+        resp = requests.post(self.url+'v1/recommend/semantic', headers=headers, params = params)
         return resp

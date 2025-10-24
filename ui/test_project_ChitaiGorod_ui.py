@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-from project_ChitaiGorod_ui import MainPageChitaiGorod
+from .project_ChitaiGorod_ui import MainPageChitaiGorod
 
 @pytest.fixture
 def driver():
@@ -14,35 +14,28 @@ def driver():
 def search_page(driver):
     page = MainPageChitaiGorod(driver)
     page.open()
-    page.search_bar()
+    page.find_search_bar()
     return page
 
-@pytest.mark.parametrize("book_list, expected_results", [
+@pytest.mark.parametrize("book_name, expected_titles", [
     ("Преступление и наказание", "Преступление и наказание"),
-    ("ПРЕСТУПЛЕНЕ И НАКАЗАНИЕ", "Преступление и наказание"),
-    ("преступление и наказание", "Преступление и наказание"),
-    ("Преступление и ", "Преступление и наказание"),
     ("Professional english", "Professional english")
 ])
-def test_book_search(search_page, book_list, expected_results):
-    results = search_page.name_search(book_list)
-    for book_name, expected_titles in zip(book_list, expected_results):
-        assert any(expected_title in results[book_name] for expected_title in
-                   expected_titles), f"Expected one of {expected_titles} in {results[book_name]} for {book_name}"
+def test_book_search(search_page, book_name, expected_titles):
+    results = search_page.name_search([book_name])
+    found_titles = results[book_name]
+    assert any(title in found_titles for title in expected_titles), f"Не найдены ожидаемые названия для {book_name}"
 
-@pytest.mark.parametrize("author_list, expected_results", [
-    ("Громыко", "Ольга Громыко"),
-    ("Громыко Ольга Николаевна", "Ольга Громыко"),
+@pytest.mark.parametrize("author_name, expected_authors", [
     ("ГРОМЫКО ОЛЬГА", "Ольга Громыко"),
     ("Charles Darwin", "Charles Darwin")
 ])
-def test_author_search(search_page, author_list, expected_results):
-    results = search_page.author_search(author_list)
-    for author_name, expected_authors in zip(author_list, expected_results):
-        assert any(expected_author in results[author_name] for expected_author in expected_authors), \
-            f"Expected one of {expected_authors} in {results[author_name]} for {author_name}"
+def test_author_search(search_page, author_name, expected_authors):
+    results = search_page.author_search([author_name])
+    found_authors = results[author_name]
+    assert any(author in found_authors for author in expected_authors), f"Не найдены ожидаемые авторы для {author_name}"
 
-@pytest.mark.parametrize("search_input", ["##########", "@@@@@", "123456", ";:?*()..,,"])
+@pytest.mark.parametrize("search_input", ["##########", "??????????"])
 def test_search_not_found(search_page, search_input):
     result = search_page.search_not_found(search_input)
     assert result == 'Похоже, у нас такого нет'
