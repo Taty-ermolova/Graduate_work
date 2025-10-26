@@ -1,0 +1,2 @@
+token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3VzZXItcmlnaHQiLCJzdWIiOjIyNTEwOTE3LCJpYXQiOjE3NjE0OTE1MjcsImV4cCI6MTc2MTQ5NTEyNywidHlwZSI6MjAsImp0aSI6IjAxOWEyMTEzLWE2NWItN2IyNS1hZGVhLWViN2IwYzI4YTIzMyIsInJvbGVzIjoxMH0.QkdPRKvetUbAiKO5u2wSFtcdQCK-_wSn5Ea4RTUgOcQ'
+url='https://web-agr.chitai-gorod.ru/web/api/'
