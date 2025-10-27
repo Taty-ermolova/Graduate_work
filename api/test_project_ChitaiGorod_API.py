@@ -3,16 +3,17 @@ import allure
 from .config import token, url
 from .project_ChitaiGorod_API import ProjectChitaiGorodApi
 
+
 @pytest.mark.api
 @allure.title("Тестирование получения списка магазинов")
-@allure.description("Этот тест проверяет, возвращает ли API список магазинов по названию книги для данного города .")
+@allure.description("Этот тест проверяет, возвращает ли API список магазинов по фразе и коду города.")
 @allure.feature("Получение данных о магазинах")
 @allure.severity(allure.severity_level.NORMAL)
 def test_get_list_stores():
     with allure.step("Создание экземпляра API"):
         list_stores = ProjectChitaiGorodApi(token=token, url=url)
 
-    with allure.step("Выполнение запроса к API для получения списка магазинов"):
+    with allure.step("Выполнение запроса для получения списка магазинов"):
         response_get_list_stores = list_stores.get_list_stores(cityId=213, phrase='Ведьмак')
 
     with allure.step("Проверить код статуса ответа"):
@@ -24,16 +25,17 @@ def test_get_list_stores():
         assert 'data' in response_data
         assert isinstance(response_data['data'], list)
 
+
 @pytest.mark.api
 @allure.title("Поиск книги по названию")
-@allure.description("Этот тест проверяет функциональность поиска по названию книги.")
+@allure.description("Этот тест проверяет функцию поиска по названию книги.")
 @allure.feature("Поиск книг")
 @allure.severity(allure.severity_level.CRITICAL)
 def test_get_search_book_title():
     with allure.step("Создание экземпляра API"):
         search_book_title = ProjectChitaiGorodApi(token=token, url=url)
 
-    with allure.step("Отправить запрос на поиск книги по названию"):
+    with (allure.step("Отправить запрос на поиск книги по названию")):
         response_get_search_book_title = search_book_title.get_search_book_title(phrase='Мастер и Маргарита', perPage=48)
 
     with allure.step("Проверить код статуса ответа"):
@@ -46,12 +48,13 @@ def test_get_search_book_title():
         assert isinstance(response_data['data']['products'], list)
 
     with allure.step("Проверить, есть ли книга в списке товаров"):
-        found = any(product['title'] == "Мастер и Маргарита" for product in response_data['data']['products'])
+        found = any(product['title'] == "Мастер и Маргарита"
+                    for product in response_data['data']['products'])
         assert found, "Книга 'Мастер и Маргарита' не найдена в списке продуктов"
 
-    with allure.step("Убедиться, что цены на продукцию неотрицательны."):
+    with (allure.step("Убедиться, что цены на продукцию неотрицательны.")):
         for product in response_data['data']['products']:
-            assert product['price'] >= 0, f"Цена книги {product['title']} отрицательная"
+            assert product['price'] >= 0, f"Цена {product['title']} отрицательная"
 
     with allure.step("Проверить количество продуктов"):
         assert len(response_data['data']['products']) <= 48, "Количество продуктов превышает ожидаемое"
@@ -96,14 +99,15 @@ def test_get_search_author_name():
             assert 'price' in product
             assert 'title' in product
 
+
 @pytest.mark.api
 @allure.title("Тест на получение списка магазинов без авторизации")
-@allure.description("Проверка получения списка магазинов без авторизации, ожидание ошибки 401")
+@allure.description("Запрос списка магазинов без авторизации, ожидание ошибки 401")
 @allure.feature("Получение данных о магазинах")
 @allure.severity(allure.severity_level.CRITICAL)
 def test_get_list_stores_not_authorization():
     with allure.step("Создание экземпляра API без авторизации"):
-        list_stores_not_authorization = ProjectChitaiGorodApi(token=token,url=url)
+        list_stores_not_authorization = ProjectChitaiGorodApi(token=token, url=url)
 
     with allure.step("Выполнение запроса к API для получения списка магазинов"):
         response_get_list_stores_not_authorization = list_stores_not_authorization.get_list_stores_not_authorization(phrase='Python', cityId=213)
@@ -115,6 +119,7 @@ def test_get_list_stores_not_authorization():
         response_json = response_get_list_stores_not_authorization.json()
         assert response_json["message"] == "Authorization обязательное поле"
 
+
 @pytest.mark.api
 @allure.title("Тест на поиск книги по неправильному URL")
 @allure.description("Проверка поиска книги по неправильному URL, ожидание ошибки 404")
@@ -122,7 +127,7 @@ def test_get_list_stores_not_authorization():
 @allure.severity(allure.severity_level.NORMAL)
 def test_get_search_book_title_bad_url():
     with allure.step("Создание экземпляра API для поиска по неправильному URL"):
-        search_book_title_bad_url = ProjectChitaiGorodApi(token=token,url=url)
+        search_book_title_bad_url = ProjectChitaiGorodApi(token=token, url=url)
 
     with allure.step("Выполнение запроса к API для поиска книги по неправильному URL"):
         response_get_search_book_title_bad_url = search_book_title_bad_url.get_search_book_title_bad_url(phrase='Программирование для детей', perPage=48)
@@ -131,6 +136,7 @@ def test_get_search_book_title_bad_url():
         assert response_get_search_book_title_bad_url.status_code == 404
         assert "404 page not found" in response_get_search_book_title_bad_url.text
 
+
 @pytest.mark.api
 @allure.title("Тест на поиск автора с неправильным методом запроса")
 @allure.description("Проверка поиска автора с использованием неправильного метода запроса, ожидание ошибки 405")
@@ -138,7 +144,7 @@ def test_get_search_book_title_bad_url():
 @allure.severity(allure.severity_level.MINOR)
 def test_get_search_author_name_incorrect_method():
     with allure.step("Создание экземпляра API для поиска автора с неправильным методом"):
-        search_author_name_incorrect_method = ProjectChitaiGorodApi(token=token,url=url)
+        search_author_name_incorrect_method = ProjectChitaiGorodApi(token=token, url=url)
 
     with allure.step("Выполнение запроса к API для поиска автора с неправильным методом запроса"):
         response_get_search_author_name_incorrect_method = search_author_name_incorrect_method.get_search_author_name_incorrect_method(phrase='Андрей Уланов', perPage=48)

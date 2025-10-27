@@ -1,5 +1,6 @@
 import requests
 
+
 class ProjectChitaiGorodApi:
     """
     Класс для взаимодействия с API "Читай-город".
@@ -20,7 +21,6 @@ class ProjectChitaiGorodApi:
         self.url = url
         self.token = token
 
-
     def get_list_stores(self, cityId, phrase):
         """
         Получает список магазинов по ID города и фразе.
@@ -38,9 +38,8 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
-        resp = requests.get(self.url+'v2/search/facet-search', headers=headers, params = params)
+        resp = requests.get(self.url + 'v2/search/facet-search', headers=headers, params=params)
         return resp
-
 
     def get_search_book_title(self, phrase, perPage):
         """
@@ -59,7 +58,7 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
-        resp = requests.get(self.url+'v1/recommend/semantic', headers=headers, params = params)
+        resp = requests.get(self.url + 'v1/recommend/semantic', headers=headers, params=params)
         return resp
 
     def get_search_author_name(self, phrase, perPage):
@@ -79,12 +78,12 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
-        resp = requests.get(self.url+'v1/recommend/semantic', headers=headers, params = params)
+        resp = requests.get(self.url + 'v1/recommend/semantic', headers=headers, params=params)
         return resp
 
     def get_list_stores_not_authorization(self, cityId, phrase):
         """
-        Получает список магазинов по ID города и фразе без использования авторизации
+        Получает список магазинов по ID города и фразе без авторизации
         Параметры:
         Параметры:
         cityId (int): Идентификатор города.
@@ -100,7 +99,7 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': ''
         }
-        resp = requests.get(self.url+'v2/search/facet-search',headers=headers, params = params)
+        resp = requests.get(self.url + 'v2/search/facet-search', headers=headers, params=params)
         return resp
 
     def get_search_book_title_bad_url(self, phrase, perPage):
@@ -120,12 +119,13 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
-        resp = requests.get(self.url, headers=headers, params = params)
+        resp = requests.get(self.url, headers=headers, params=params)
         return resp
 
     def get_search_author_name_incorrect_method(self, phrase, perPage):
         """
-        Ищет книги по имени автора, но использует неправильный HTTP-метод (POST вместо GET).
+        Ищет книги по имени автора, но использует неправильный
+         HTTP-метод (POST вместо GET).
         Параметры:
         phrase (str): Поисковая фраза.
         perPage (int): Количество результатов на страницу.
@@ -140,5 +140,5 @@ class ProjectChitaiGorodApi:
         headers = {
             'Authorization': f'Bearer {self.token}'
         }
-        resp = requests.post(self.url+'v1/recommend/semantic', headers=headers, params = params)
+        resp = requests.post(self.url + 'v1/recommend/semantic', headers=headers, params=params)
         return resp

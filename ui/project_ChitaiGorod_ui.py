@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 from selenium.common.exceptions import StaleElementReferenceException
 
+
 class MainPageChitaiGorod:
     """
     Класс для работы с основной страницей сайта "Читай-город".
@@ -132,7 +133,6 @@ class MainPageChitaiGorod:
             results[author_name] = []
             return results
 
-
     def _get_authors_safely(self):
         """
         Частный метод, безопасно получающий имена авторов с обработкой исключения StaleElementReferenceException.
@@ -170,7 +170,7 @@ class MainPageChitaiGorod:
 
         return authors
 
-    def search_not_found(self,search_input):
+    def search_not_found(self, search_input):
         """
         Выполняет поиск на сайте и проверяет, что товар не найден
         Параметры:

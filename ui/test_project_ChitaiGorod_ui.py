@@ -5,11 +5,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from .project_ChitaiGorod_ui import MainPageChitaiGorod
 import allure
 
+
 @pytest.fixture
 def driver():
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     yield driver
     driver.quit()
+
 
 @pytest.fixture
 def search_page(driver):
@@ -17,6 +19,7 @@ def search_page(driver):
     page.open()
     page.find_search_bar()
     return page
+
 
 @pytest.mark.ui
 @pytest.mark.parametrize("book_name, expected_titles", [
